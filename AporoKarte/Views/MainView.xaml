@@ -1,0 +1,68 @@
+﻿<Window x:Class="AporoKarte.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:AporoKarte.ViewModels"
+        xmlns:local="clr-namespace:AporoKarte"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        local:CloseWindowAttachedBehavior.Close="{Binding CloseWindow}"
+        Title="あぽろの森　顧客カルテ管理ツール" Height="700" Width="1024" ResizeMode="CanMinimize">
+    <!--<Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>-->
+
+    <Grid Background="#FFFFF5B9">
+
+        <TextBlock HorizontalAlignment="Left" Height="36" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="986" Text="顧客カルテ一覧" FontSize="24" Background="#FFA8EEAC"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="10,66,0,0" TextWrapping="Wrap" Text="検索条件" VerticalAlignment="Top" Width="81" FontSize="16" Foreground="#FF272727" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="申込者名" VerticalAlignment="Top" Width="73" FontSize="16" Foreground="#FF272727" Margin="31.5,94,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="104.5,94,0,0" TextWrapping="Wrap" Text="{Binding Path=ClientName}"  VerticalAlignment="Top" Width="162"/>
+        
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="調整日" VerticalAlignment="Top" Width="50" FontSize="16" Foreground="#FF272727" Margin="286.5,94,0,0"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="～" VerticalAlignment="Top" Width="19" FontSize="16" Foreground="#FF272727" Margin="457.5,94,0,0"/>
+        <DatePicker x:Name="adjustDateStart" SelectedDate="{Binding Path=AdjustDateStart}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="341.5,93,0,0" Width="110" />
+        <DatePicker x:Name="adjustDateEnd" SelectedDate="{Binding Path=AdjustDateEnd}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="481.5,93,0,0" Width="110" />
+
+        <Button Content="検索" Margin="615.5,92,332.5,0" Height="Auto" VerticalAlignment="Top" Command="{Binding Path=SearchListCommand}" CommandParameter="" FontSize="14"/>
+        <Button Content="新規登録" Margin="884,126,34,0" Command="{Binding RegistKarteCommand}" Height="24" FontSize="14" VerticalAlignment="Top"/>
+
+        <DataGrid Name="dataGrid" ItemsSource="{Binding Path=KarteListData}" Margin="31.5,155,34,54" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Path=ClientId}" Visibility="Hidden" IsReadOnly="True" />
+                <DataGridTextColumn Header="申込者名" Binding="{Binding Path=ClientName}" Width="140" IsReadOnly="True" />
+                <DataGridTextColumn Header="紹介者名" Binding="{Binding Path=IntroductorName}" Width="140" IsReadOnly="True" />
+                <DataGridTextColumn Header="住所(都道府県)" Binding="{Binding Path=AddressPref}" Width="100" IsReadOnly="True" />
+                <DataGridTextColumn Header="住所(市区町村)" Binding="{Binding Path=AddressCity}" Width="100" IsReadOnly="True" />
+                <DataGridTextColumn Header="電話番号" Binding="{Binding Path=Tel}" Width="100" IsReadOnly="True" />
+                <DataGridTextColumn Header="調整日" Binding="{Binding Path=AdjustYmd, StringFormat=yyyy/MM/dd}" Width="80" IsReadOnly="True" />
+                <DataGridTextColumn Header="確認日" Binding="{Binding Path=ConfirmYmd, StringFormat=yyyy/MM/dd}" Width="80" IsReadOnly="True" />
+                <DataGridTextColumn Header="金額" Binding="{Binding Path=AdjustAmount,StringFormat=#\,0}" Width="100" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="編集" Width="80">
+
+                    <DataGridTemplateColumn.CellTemplate>
+
+                        <DataTemplate>
+                            <!--<Button Content="編集" IsEnabled="True" Command="{Binding EditKarteDetailCommand}" CommandParameter="{Binding Path=ClientId}"/>-->
+                            <Button Content="編集" IsEnabled="True" Command="{Binding DataContext.EditKarteDetailCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Path=ClientId}"/>
+                            
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+        <Button Content="終了" Margin="884,623,34,0" Command="{Binding CloseCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

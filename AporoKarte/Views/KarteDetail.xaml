@@ -1,0 +1,152 @@
+﻿<Window x:Class="AporoKarte.Views.KarteDetail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AporoKarte"
+        xmlns:vm="clr-namespace:AporoKarte.ViewModels"
+        local:CloseWindowAttachedBehavior.Close="{Binding CloseWindow}"
+        Title="あぽろの森　顧客カルテ管理ツール" Height="700" Width="1024" ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <DataTemplate x:Key="DateTemplate">
+            <StackPanel Orientation="Horizontal" Margin="5,0" VerticalAlignment="Center">
+                <TextBox Text="{Binding Birthday, StringFormat=yyyy/MM/dd, Mode=TwoWay}" IsReadOnly="True" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="DateEditTemplate">
+            <DatePicker SelectedDateFormat="Short" SelectedDate="{Binding Birthday, Mode=TwoWay,StringFormat=yyyy/MM/dd}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="DateTemplateAdjust">
+            <StackPanel Orientation="Horizontal" Margin="5,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding AdjustYmd, StringFormat=yyyy/MM/dd, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="DateEditTemplateAdjust">
+            <DatePicker SelectedDateFormat="Short" SelectedDate="{Binding AdjustYmd, Mode=TwoWay, StringFormat=yyyy/MM/dd, UpdateSourceTrigger=PropertyChanged}"  />
+        </DataTemplate>
+
+        <CollectionViewSource x:Key="AdjustPartsComboList" Source="{Binding AdjustPartsComboList}" />
+
+        <CollectionViewSource x:Key="BirthdayYearComboList" Source="{Binding BirthdayYear}" />
+        <CollectionViewSource x:Key="BirthdayMonthComboList" Source="{Binding BirthdayMonth}" />
+        <CollectionViewSource x:Key="BirthdayDayComboList" Source="{Binding BirthdayDay}" />
+    </Window.Resources>
+
+    <Grid Background="#FFFFF5B9">
+
+        <TextBlock HorizontalAlignment="Left" Height="36" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="986" Text="顧客カルテ" FontSize="24" Background="#FFA8EEAC"/>
+
+        <Button Content="カルテ出力" Margin="884,15.6,34,0" Command="{Binding KarteOutCommand}" FontSize="14" Height="24" VerticalAlignment="Top"/>
+
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="10,66,0,0" TextWrapping="Wrap" Text="基本情報" VerticalAlignment="Top" Width="81" FontSize="16" Foreground="#FF272727" FontWeight="Bold"/>
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="申込者名" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,98.751,0,0" FontWeight="Bold"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="154.373,98.751,0,0" TextWrapping="Wrap" Text="{Binding Path=ClientName}" VerticalAlignment="Top" Width="162" MaxLength="256" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="ふりがな" VerticalAlignment="Top" Width="73" FontSize="16" Foreground="#FF272727" Margin="342.373,98.751,0,0" FontWeight="Bold"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="420.373,98.751,0,0" TextWrapping="Wrap" Text="{Binding Path=ClientNameKana}" VerticalAlignment="Top" Width="162" MaxLength="256" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="紹介者名" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,127.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="154.373,127.751,0,0" TextWrapping="Wrap" Text="{Binding Path=IntroductorName}" VerticalAlignment="Top" Width="162" MaxLength="256" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="ふりがな" VerticalAlignment="Top" Width="73" FontSize="16" Foreground="#FF272727" Margin="342.373,127.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="420.373,127.751,0,0" TextWrapping="Wrap" Text="{Binding Path=IntroductorNameKana}" VerticalAlignment="Top" Width="162" MaxLength="256" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="住所" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,156.751,0,0" FontWeight="Bold"/>
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="〒" VerticalAlignment="Top" Width="15.373" FontSize="16" Foreground="#FF272727" Margin="154.373,156.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="174.746,157.991,0,0" TextWrapping="Wrap" Text="{Binding Path=PostCode}" VerticalAlignment="Top" Width="65.627"  MaxLength="8" InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Alphanumeric" />
+        <ComboBox HorizontalAlignment="Left" Height="24" Margin="245.373,156.751,0,0" VerticalAlignment="Top" Width="99" ItemsSource="{Binding AddressPrefComboList}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValue="{Binding Path=AddressPref}" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="市区町村" VerticalAlignment="Top" Width="70.373" FontSize="16" Foreground="#FF272727" Margin="349.373,156.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="424.746,156.751,0,0" TextWrapping="Wrap" Text="{Binding Path=AddressCity}" VerticalAlignment="Top" Width="157.627" MaxLength="256" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="その他住所" VerticalAlignment="Top" Width="86" FontSize="16" Foreground="#FF272727" Margin="154.373,185.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="245.373,185.751,0,0" TextWrapping="Wrap" Text="{Binding Path=AddressOther}" VerticalAlignment="Top" Width="337" AcceptsReturn="True"  MaxLength="256" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="ふりがな" VerticalAlignment="Top" Width="86" FontSize="16" Foreground="#FF272727" Margin="154.373,214.751,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="245.373,214.751,0,0" TextWrapping="Wrap" Text="{Binding Path=AddressKana}" VerticalAlignment="Top" Width="337" AcceptsReturn="True"  MaxLength="256" />
+
+
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="電話番号" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,246.031,0,0" FontWeight="Bold"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="154.373,246.031,0,0" TextWrapping="Wrap" Text="{Binding Path=Tel}" VerticalAlignment="Top" Width="162"  MaxLength="15"  InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Alphanumeric" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="FAX番号" VerticalAlignment="Top" Width="74.373" FontSize="16" Foreground="#FF272727" Margin="336,246.151,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="24" Margin="415.373,246.031,0,0" TextWrapping="Wrap" Text="{Binding Path=Fax}" VerticalAlignment="Top" Width="167" MaxLength="15"  InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Alphanumeric" />
+
+        <TextBlock HorizontalAlignment="Left" Height="28" TextWrapping="Wrap" Text="ご相談日" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,275.031,0,0"/>
+        <DatePicker x:Name="datePicker1" SelectedDate="{Binding ConsultationYmd}" SelectedDateFormat="Short" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154.373,275.031,0,0" Width="110" />
+
+        <TextBlock HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="鑑定日" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,306.031,0,0"/>
+        <DatePicker x:Name="datePicker1_Copy" SelectedDate="{Binding OpinionYmd}" SelectedDateFormat="Short" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154.373,306.031,0,0" Width="110" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="鑑定場所住所" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,337.031,0,0"/>
+
+        <CheckBox x:Name="AddressComparison" IsChecked="{Binding Path=AddressComparisonFlg}" Content="申込者住所と同じ"  HorizontalAlignment="Left" Height="24" Margin="154.373,337.031,0,0" VerticalAlignment="Top" Width="155" FontSize="14" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="〒" VerticalAlignment="Top" Width="15.373" FontSize="16" Foreground="#FF272727" Margin="154.373,366.031,0,0"/>
+        <TextBox x:Name="AdjustAddressPostCode" HorizontalAlignment="Left" Height="24" Margin="174.746,367.271,0,0" TextWrapping="Wrap" Text="{Binding Path=AdjustPostCode}" VerticalAlignment="Top" Width="65.627"  MaxLength="8"  InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Alphanumeric"/>
+        <ComboBox x:Name="AdjustAddressPref" HorizontalAlignment="Left" Height="24" Margin="245.373,366.031,0,0" VerticalAlignment="Top" Width="99" ItemsSource="{Binding AdjustAddressPrefComboList}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValue="{Binding Path=AdjustAddressPref}"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="市区町村" VerticalAlignment="Top" Width="70.373" FontSize="16" Foreground="#FF272727" Margin="349.373,366.031,0,0"/>
+        <TextBox x:Name="AdjustAddressCity" HorizontalAlignment="Left" Height="24" Margin="424.746,366.031,0,0" TextWrapping="Wrap" Text="{Binding Path=AdjustAddressCity}" VerticalAlignment="Top" Width="157.627" MaxLength="256" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="その他住所" VerticalAlignment="Top" Width="86" FontSize="16" Foreground="#FF272727" Margin="154.373,395.031,0,0"/>
+        <TextBox x:Name="AdjustAddressOther" HorizontalAlignment="Left" Height="24" Margin="245.373,395.031,0,0" TextWrapping="Wrap" Text="{Binding Path=AdjustAddressOther}" VerticalAlignment="Top" Width="337" AcceptsReturn="False"  MaxLength="256" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="ふりがな" VerticalAlignment="Top" Width="86" FontSize="16" Foreground="#FF272727" Margin="154.373,424.031,0,0"/>
+        <TextBox x:Name="AdjustAddressKana" HorizontalAlignment="Left" Height="24" Margin="245.373,424.031,0,0" TextWrapping="Wrap" Text="{Binding Path=AdjustAddressKana}" VerticalAlignment="Top" Width="337" AcceptsReturn="False"  MaxLength="256" />
+
+        <TextBlock HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="最終調整日" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,450.791,0,0"/>
+        <DatePicker x:Name="datePicker1_Copy1" SelectedDate="{Binding AdjustYmd}" SelectedDateFormat="Short" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154.373,450.791,0,0" Width="110" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="土地面積" VerticalAlignment="Top" Width="67.373" FontSize="16" Foreground="#FF272727" Margin="437,452.791,0,0"/>
+        <TextBox HorizontalAlignment="Left" TextAlignment="Right" Height="24" Margin="509.373,453.031,0,0" TextWrapping="Wrap" Text="{Binding Path=LandArea}" VerticalAlignment="Top" Width="43" MaxLength="5"  InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Roman" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="坪" VerticalAlignment="Top" Width="23" FontSize="16" Foreground="#FF272727" Margin="559.373,453.031,0,0"/>
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="調整代金" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,481.791,0,0"/>
+        <TextBox HorizontalAlignment="Left" TextAlignment="Right" Height="24" Margin="154.373,481.791,0,0" TextWrapping="Wrap" Text="{Binding Path=AdjustAmount, StringFormat=#\,0}" VerticalAlignment="Top" Width="86" MaxLength="9" InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Roman" />
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="円" VerticalAlignment="Top" Width="23" FontSize="16" Foreground="#FF272727" Margin="245.373,481.791,0,0"/>
+
+        <TextBlock HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="確認日" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,510.791,0,0"/>
+        <DatePicker x:Name="datePicker1_Copy2" SelectedDate="{Binding ConfirmYmd}" SelectedDateFormat="Short" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="154.373,510.791,0,0" Width="110" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="関連顧客メモ" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,539.791,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="50" Margin="154.373,539.791,0,0" TextWrapping="Wrap" Text="{Binding Path=ChainClientMemo}" VerticalAlignment="Top" Width="428" AcceptsReturn="True"  MaxLength="500" />
+
+        <TextBlock HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="その他メモ" VerticalAlignment="Top" Width="122.373" FontSize="16" Foreground="#FF272727" Margin="27,594.791,0,0"/>
+        <TextBox HorizontalAlignment="Left" Height="51" Margin="154.373,594.791,0,0" TextWrapping="Wrap" Text="{Binding Path=OtherMemo}" VerticalAlignment="Top" Width="428" AcceptsReturn="True"  MaxLength="9" />
+
+        <Button Content="追加" Margin="869,66,88,0" Command="{Binding FamilyStructureAddCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <Button Content="削除" Margin="935,66,22,0" Command="{Binding FamilyStructureRemoveCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="599,66,0,0" TextWrapping="Wrap" Text="家族構成" VerticalAlignment="Top" Width="81" FontSize="16" Foreground="#FF272727" FontWeight="Bold"/>
+        <DataGrid Name="dataGrid" ItemsSource="{Binding FamilyStructureData}" SelectedIndex="{Binding FamilyStructureSelectedIndex}" Margin="599,95,22,433.249" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="名前" Width="80" Binding="{Binding Path=Name}" />
+                <!--<DataGridTemplateColumn CellTemplate="{StaticResource DateTemplate}" CellEditingTemplate="{StaticResource DateEditTemplate}" Header="生年月日" Width="90" />-->
+                <DataGridComboBoxColumn Header="生年" Width="70" ItemsSource="{Binding Source={StaticResource BirthdayYearComboList}}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValueBinding="{Binding BirthdayYearVal, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridComboBoxColumn Header="月" Width="50" ItemsSource="{Binding Source={StaticResource BirthdayMonthComboList}}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValueBinding="{Binding BirthdayMonthVal, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridComboBoxColumn Header="日" Width="50" ItemsSource="{Binding Source={StaticResource BirthdayDayComboList}}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValueBinding="{Binding BirthdayDayVal, UpdateSourceTrigger=PropertyChanged}" />
+
+                <DataGridTextColumn Header="続柄" Width="40" Binding="{Binding Path=Relation}" />
+                <DataGridTextColumn Header="本命星" Width="95" Binding="{Binding Path=HonmeiseiName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="本命星コード" Binding="{Binding Path=Honmeisei}" Visibility="Hidden" IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock HorizontalAlignment="Left" Height="24" Margin="599,259.311,0,0" TextWrapping="Wrap" Text="調整備品" VerticalAlignment="Top" Width="81" FontSize="16" Foreground="#FF272727" FontWeight="Bold"/>
+        <Button Content="追加" Margin="869,259.311,88,0" Command="{Binding AdjustPartsAddCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <Button Content="削除" Margin="935,259.311,22,0" Command="{Binding AdjustPartsRemoveCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <DataGrid x:Name="dataGrid_Copy" ItemsSource="{Binding AdjustPartsData}" SelectedIndex="{Binding AdjustPartsSelectedIndex}" Margin="599,288.311,22,73.929" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" CanUserAddRows="False" AutoGenerateColumns="False" CanUserSortColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTemplateColumn CellTemplate="{StaticResource DateTemplateAdjust}" CellEditingTemplate="{StaticResource DateEditTemplateAdjust}"  Header="調整日" Width="90" />
+                <DataGridComboBoxColumn Header="備品名" Width="190" ItemsSource="{Binding Source={StaticResource AdjustPartsComboList}}" SelectedValuePath="Value" DisplayMemberPath="Display" SelectedValueBinding="{Binding PartsCode}" />
+                <DataGridTextColumn Header="箇所数" Width="95" Binding="{Binding Count, StringFormat=#\,0}"  InputMethod.PreferredImeState="Off" InputMethod.PreferredImeConversionMode="Roman" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Content="カルテ削除" Margin="612,621.791,306,0" Command="{Binding DeleteKarteCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <Button Content="キャンセル" Margin="779,621.791,139,0" Command="{Binding CancelCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+        <Button Content="登録" Margin="884,621.791,34,0" Command="{Binding RegistKarteCommand}" CommandParameter="" FontSize="14" Height="24" VerticalAlignment="Top"/>
+
+
+
+
+
+    </Grid>
+</Window>
